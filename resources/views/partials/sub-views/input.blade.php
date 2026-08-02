@@ -1,0 +1,1 @@
+<input class="border-2 h-10 text-zinc-100 " type="text"/>
