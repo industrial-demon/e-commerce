@@ -5,7 +5,7 @@
 ])
 
 <?php if ($expandable && $heading): ?>
-
+{{route('admin.dashboard')}}
 <ui-disclosure
     {{ $attributes->class('group/disclosure') }}
     @if ($expanded === true) open @endif

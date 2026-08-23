@@ -1,28 +1,26 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvokableController;
+use App\Http\Controllers\ProductContoller;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
     return  view('welcome');
-});
+})->name('home');
 
 
 
-Route::get('/admin/dashboard', function(){
-
+Route::get('/admin/dashboard', function () {
     return view('admin.index');
 });
 
 
-Route::get('/products', function () {
-    $test = null;
-    return view('products.index')->with('name', 'phone 444',)->with(
-        'price',
-        3333
-    );
-});
+// Route::get('/categories', [CategoryController::class, 'store']);
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/1', [CategoryController::class, 'whereCondition']);
+Route::get('/products', [ProductContoller::class, 'index']);
 
 Route::get('/contact-us', function () {
     $product = 'PHONE';
@@ -31,7 +29,7 @@ Route::get('/contact-us', function () {
 
 
 Route::get('/about-us', function () {
-   $product = 'PHONE';
+    $product = 'PHONE';
     return view('about-us', compact('product'));
 });
 
@@ -40,6 +38,10 @@ Route::get('invoke', InvokableController::class);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('admin', 'admin.index')->name('admin.dashboard');
 });
 
 
