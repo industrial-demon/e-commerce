@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductContoller extends Controller
 {
@@ -29,8 +30,33 @@ class ProductContoller extends Controller
 
         // $products = Product::where('regular_price', 532759)->where('sale_price', 56554)->get();
         //$products = Product::whereAll(['regular_price', 'sale_price'], '=',532759 )->get();
-        $products = Product::whereAny(['regular_price', 'sale_price', 'name'], 'like','%Car%' )->get();
-
+        // $products = Product::whereAny(['regular_price', 'sale_price', 'name'], 'like', '%Car%')->get();
+       // $products = Product::all();
+        $products = Product::onlyTrashed()->get();
+        //$products = Product::withTrashed()->find(1);
+       // $products->restore();
         return $products;
+    }
+
+
+    public function publihedProducts()
+    {
+        return Product::where(
+            'status',
+            '=',
+            'published'
+        )->get();
+    }
+
+    public function draftProducts()
+    {
+        return Product::status('published')->get();
+    }
+
+    public function destroy(Product $product)
+    {
+        Log::info('Deleting product with ID: ' . $product);
+        $product->delete();
+        return response()->json(['message' => 'Product deleted successfully'], 200);
     }
 }
